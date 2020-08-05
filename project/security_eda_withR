@@ -1,0 +1,57 @@
+sb_map<-get_map(c(lon=127.0182, lat=37.5891), zoom=13, scale=2)
+lights_sb<-read.csv(file="lights_sb.csv")
+cctv_sb<-read.csv(file="cctv_sb.csv")
+bell_sb<-read.csv(file="bell_sb.csv")
+police_sb<-read.csv(file="police_sb.csv")
+ggmap(sb_map)+
+   geom_point(aes(lon, lat), data=lights_sb, size=1/3, alpha=1/4, color="blue")+
+   geom_point(aes(lon,lat), data=cctv_sb, size=1/3, alpha=1/4, color="blue")+
+   geom_point(aes(lon,lat), data=bell_sb, size=1/3, alpha=1/4, color="blue")+
+   geom_point(aes(lon,lat), data=police_sb, size=3, alpha=1/2, color="red")
+
+ggmap(kumap)
++ stat_density2d(aes(x=lon, y=lat, 
+fill=..level..), alpha=0.1, geom = "polygon", 
+data = filter(sb, type=="lights"))
++scale_fill_gradient(low="yellow", 
++ high="red") 
++geom_point(aes(color = type, size = type), 
+data = filter(sb, type!="lights"))
++scale_size_manual(values=c(2,1,5))
+	
+ggmap(sb_map)+
+stat_density2d(aes(x=lon, y=lat, fill= ..level..),
+alpha=0.3, geom ="polygon",data=sb)
++scale_fill_gradient(low="yellow", 
++high="red")
+
+# Load the shiny package
+library(shiny)
+# Define UI for the application
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      numericInput("lon_x", "Enter Longitude",127.0278, min(sb$lon)-0.05, max(sb$lon)+0.05),
+      numericInput("lat_x", "Enter Latitude", 37.5880, min(sb$lat)-0.05, max(sb$lat)+0.05),
+	numericInput("zoom_x", "Enter Zoom", 15, 10, 18)
+    ),
+    mainPanel(
+      plotOutput("safemap"),
+    )
+  )
+)
+
+# Define the server logic
+server <- function(input, output) {
+   output$ safemap <- renderPlot({
+	base_map <-	get_map(c(lon=input$lon_x, lat=input$lat_x),zoom=input$zoom_x, scale=1,maptype='roadmap')
+	layer_map <- ggmap(base_map)+
+		stat_density2d(aes(x=lon, y=lat, fill=..level..), alpha=0.1, geom = "polygon", data = filter(sb, type=="lights"))+
+		scale_fill_gradient(low="yellow", high="red") +
+		geom_point(aes(color = type, size = type), data = filter(sb, type!="lights"))+
+		scale_size_manual(values=c(2,1,5))
+	plot(layer_map)
+  })
+}
+## Run the application
+shinyApp(ui = ui, server = server)
