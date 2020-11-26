@@ -1,4 +1,6 @@
-### Hi there 👋
+### KOREA University Department of Statistics
+### President of KUBIG (고려대학교 빅데이터 연구회 11기 학회장)
+
 
 <!--
 **924ahn/924ahn** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
