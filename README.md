@@ -1,5 +1,5 @@
 ### KOREA University Department of Statistics
-### President of KUBIG (고려대학교 빅데이터 연구회 11기 학회장)
+### President of KUBIG (고려대학교 빅데이터 연구회 13기 학회장)
 
 
 <!--
